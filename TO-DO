@@ -1,0 +1,13 @@
+RegEx to tag:
+    -times
+    -location
+    -separate header from main email text
+        -verify info extracted from header with main email text
+
+POS tagging to tag:
+    -paragraphs
+    -sentences
+    -Names?
+
+x = nltk.data.load(file,format='text')
+x = x[:x.find('Abstract: ')]

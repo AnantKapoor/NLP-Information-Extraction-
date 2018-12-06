@@ -1,0 +1,17 @@
+Information Extraction of Seminars
+
+Part 1: Entity Tagging
+    1) separated header from main body of text
+    2) Created RegEx query to match dates from header
+    3) Created RegEx query to select location from header
+    4) Changed RegEx for time to only output the first result (BAD METHOD, FIX!)
+
+    NEXT
+    see accuracy of time and location tags
+    stanford tagger
+        use for name entities (speakers)
+        don't parse each sentence individually
+        parse entire email in one go
+
+
+Part 2: Ontology Construction
