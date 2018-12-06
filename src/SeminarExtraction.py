@@ -2,7 +2,7 @@ import re
 import nltk
 
 # x = nltk.data.load("301.txt")
-x = open("seminars_untagged/334.txt").read()
+x = open("../data/seminars_untagged/304.txt").read()
 header = x[:x.find('Abstract: ')]
 body = x[x.find('Abstract: '):]
 print(header)
@@ -18,27 +18,15 @@ for matchNum, match in enumerate(timeMatches):
                                                                         end=match.end(), match=match.group()))
     break
 
+################ EXTRACT LOCATION ################
 
-# print(header)
+locationRegEx = r"Place:\s*([^\n]+)"
+locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
 
+if locationMatches:
+    location = locationMatches.group(1)
 
-
-
-# ################ EXTRACT LOCATION ################
-# locationRegEx = r"Place:\s*([^\n]+)"
-# locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
-#
-# if locationMatches:
-#     location = locationMatches.group(1)
-#
-#     print(
-#         "Location match found at {start}-{end}: {group}".format(start=locationMatches.start(1),
-#                                                        end=locationMatches.end(1),
-#                                                        group=locationMatches.group(1)))
-
-
-
-
-
-
-
+    print(
+        "Location match found at {start}-{end}: {group}".format(start=locationMatches.start(1),
+                                                       end=locationMatches.end(1),
+                                                       group=locationMatches.group(1)))
