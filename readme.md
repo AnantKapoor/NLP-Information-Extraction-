@@ -1,1 +1,1 @@
-anant = stupid
+anant = stupid and silly
