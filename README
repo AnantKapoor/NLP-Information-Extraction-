@@ -5,10 +5,15 @@ Part 1: Entity Tagging
     2) Created RegEx query to match dates from header
     3) Created RegEx query to select location from header
     4) Changed RegEx for time to only output the first result (BAD METHOD, FIX!)
+    5) Fixed regex, using re.sub now
     5) Implemented Stanford tagger to extract names and organisations
+    6) Tagged times and locations (bad implentation - add white space recognition in regex) in header
+    7) Tagged speaker in header
 
     NEXT
-    add tags
+    tag speaker from header
+    validate info from header to tag main body
+    use tagged times and locations from
     see accuracy of time and location tags
         F measure
     regex to extract sentences

@@ -11,7 +11,7 @@ st = StanfordNERTagger('../english.all.3class.distsim.crf.ser.gz',
                        '../stanford-ner.jar',
                        encoding='utf-8')
 
-x = open("../data/seminars_untagged/314.txt").read()
+x = open("../data/seminars_untagged/301.txt").read()
 header = x[:x.find('Abstract: ')]
 body = x[x.find('Abstract: '):]
 print(header)
@@ -30,13 +30,22 @@ def header_time():
 
 
 def header_location():
-    regex = r"Place:\s*([^\n]+)"
-    subst = "Place:    <location>\\1<location>"
+    regex = r"(?<=place:)(.*$)"
+    subst = "<location>\\1<location>"
     # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
     result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
+
     if result:
         print(result)
 
+
+def header_speaker():
+    regex = r"(?<=\who:)(.*?)(?=,|-|\n)"
+    subst = "<Speaker>\\1<Speaker>"
+    # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
+    result = re.sub(regex, subst, header, 0, re.MULTILINE | re.IGNORECASE)
+    if result:
+        print(result)
 
 
 def stanford_tagger(text):
@@ -91,8 +100,10 @@ def stanford_main():
     except:
         print("Failed Stanford Tagging")
 
+
 header_time()
 header_location()
+header_speaker()
 stanford_main()
 
 # stanford_tagger(header)
