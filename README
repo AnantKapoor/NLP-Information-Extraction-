@@ -8,7 +8,7 @@ Part 1: Entity Tagging
     5) Fixed regex, using re.sub now
     5) Implemented Stanford tagger to extract names and organisations
     6) Tagged times and locations (bad implentation - add white space recognition in regex) in header
-    7) Tagged speaker in header
+    7) Tagged speaker in header (add white space recognition in regex)
 
     NEXT
     tag speaker from header

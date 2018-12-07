@@ -11,7 +11,7 @@ st = StanfordNERTagger('../english.all.3class.distsim.crf.ser.gz',
                        '../stanford-ner.jar',
                        encoding='utf-8')
 
-x = open("../data/seminars_untagged/301.txt").read()
+x = open("../data/seminars_untagged/310.txt").read()
 header = x[:x.find('Abstract: ')]
 body = x[x.find('Abstract: '):]
 print(header)
@@ -30,7 +30,7 @@ def header_time():
 
 
 def header_location():
-    regex = r"(?<=place:)(.*$)"
+    regex = r"(?<=place:    )(.*$)"
     subst = "<location>\\1<location>"
     # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
     result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
@@ -40,7 +40,7 @@ def header_location():
 
 
 def header_speaker():
-    regex = r"(?<=\who:)(.*?)(?=,|-|\n)"
+    regex = r"(?<=who:      )(.*?)(?=,|-|\n)"
     subst = "<Speaker>\\1<Speaker>"
     # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
     result = re.sub(regex, subst, header, 0, re.MULTILINE | re.IGNORECASE)
@@ -104,6 +104,6 @@ def stanford_main():
 header_time()
 header_location()
 header_speaker()
-stanford_main()
+# stanford_main()
 
 # stanford_tagger(header)
