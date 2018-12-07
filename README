@@ -8,10 +8,12 @@ Part 1: Entity Tagging
 
     NEXT
     see accuracy of time and location tags
+        F measure
     stanford tagger
         use for name entities (speakers)
         don't parse each sentence individually
         parse entire email in one go
+    'more tips' page on canvas
 
 
 Part 2: Ontology Construction
