@@ -18,27 +18,29 @@ print(header)
 
 
 def time_extract():
-    timeRegEx = r"([012]?[0-9][:][0-9]{2}?\s?[ap]m)|([012]?[0-9][:][0-9]{2})|([01][0-9]?\s?[ap]m)"
+    regex = r"([012]?[0-9][:][0-9]{2}?\s?[ap]m)|([012]?[0-9][:][0-9]{2})|([01][0-9]?\s?[ap]m)"
 
-    timeMatches = re.finditer(timeRegEx, header, re.MULTILINE | re.IGNORECASE)
+    subst = "<time>\\1<time>"
 
-    for matchNum, match in enumerate(timeMatches):
-        print("Time match was found at {start}-{end}: {match}".format(start=match.start(),
-                                                                      end=match.end(), match=match.group()))
-        break
+    # You can manually specify the number of replacements by changing the 4th argument
+    result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
+
+    if result:
+        print(result)
 
 
 def location_extract():
     locationRegEx = r"Place:\s*([^\n]+)"
     locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
+    location_match = []
 
     if locationMatches:
-        location = locationMatches.group(1)
-
-        print(
-            "Location match found at {start}-{end}: {group}".format(start=locationMatches.start(1),
-                                                                    end=locationMatches.end(1),
-                                                                    group=locationMatches.group(1)))
+        # print(
+        #     "Location match found at {start}-{end}: {group}".format(start=locationMatches.start(1),
+        #                                                             end=locationMatches.end(1),
+        #                                                             group=locationMatches.group(1)))
+        location_match.append(locationMatches.group(1))
+        print(location_match)
 
 
 def stanford_tagger(text):
