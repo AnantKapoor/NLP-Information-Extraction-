@@ -1,6 +1,5 @@
-.idea
-workspace.xml
-assignment.xml
-misc.xml
-vcs.xml
-modules.xml
+.idea/workspace.xml
+.idea/assignment.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/modules.xml
