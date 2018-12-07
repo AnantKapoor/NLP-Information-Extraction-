@@ -11,13 +11,13 @@ st = StanfordNERTagger('../english.all.3class.distsim.crf.ser.gz',
                        '../stanford-ner.jar',
                        encoding='utf-8')
 
-x = open("../data/seminars_untagged/301.txt").read()
+x = open("../data/seminars_untagged/314.txt").read()
 header = x[:x.find('Abstract: ')]
 body = x[x.find('Abstract: '):]
 print(header)
 
 
-def time_extract():
+def header_time():
     regex = r"([012]?[0-9][:][0-9]{2}?\s?[ap]m)|([012]?[0-9][:][0-9]{2})|([01][0-9]?\s?[ap]m)"
 
     subst = "<time>\\1<time>"
@@ -29,18 +29,14 @@ def time_extract():
         print(result)
 
 
-def location_extract():
-    locationRegEx = r"Place:\s*([^\n]+)"
-    locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
-    location_match = []
+def header_location():
+    regex = r"Place:\s*([^\n]+)"
+    subst = "Place:    <location>\\1<location>"
+    # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
+    result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
+    if result:
+        print(result)
 
-    if locationMatches:
-        # print(
-        #     "Location match found at {start}-{end}: {group}".format(start=locationMatches.start(1),
-        #                                                             end=locationMatches.end(1),
-        #                                                             group=locationMatches.group(1)))
-        location_match.append(locationMatches.group(1))
-        print(location_match)
 
 
 def stanford_tagger(text):
@@ -90,11 +86,13 @@ def structure_ne(ne_tree):
 
 
 def stanford_main():
-    print(structure_ne(stanford_tree(bio_tagger(stanford_tagger(header)))))
+    try:
+        print(structure_ne(stanford_tree(bio_tagger(stanford_tagger(header)))))
+    except:
+        print("Failed Stanford Tagging")
 
-
-time_extract()
-location_extract()
+header_time()
+header_location()
 stanford_main()
 
 # stanford_tagger(header)
