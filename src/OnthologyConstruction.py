@@ -24,14 +24,16 @@ def word_freq_corpus():
 
 
 def word_freq_email():
-    x = open("../data/seminars_untagged/301.txt").read()
+    filename = '../data/seminars_untagged/400.txt'
+    x = open(filename).read()
     header = x[:x.find('Abstract: ')]
     body = x[x.find('Abstract: '):]
-    words = re.findall(r'\w+', open('../data/seminars_untagged/301.txt').read().lower())
+    words = re.findall(r'\w+', open(filename).read().lower())
 
-    print(header)
+    # print(header)
+    print(x)
     counts = Counter(words)
-    common_words = Counter(words).most_common(10)
+    common_words = counts.most_common(10)
     print(common_words)
 
 
@@ -54,7 +56,7 @@ def header_topic():
                                                                             group=match.group(groupNum)))
 
 
-word_freq_corpus()
+# word_freq_corpus()
 
 word_freq_email()
 

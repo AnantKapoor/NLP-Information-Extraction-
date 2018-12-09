@@ -20,13 +20,22 @@ print(header)
 def header_time():
     regex = r"([012]?[0-9][:][0-9]{2}?\s?[ap]m)|([012]?[0-9][:][0-9]{2})|([01][0-9]?\s?[ap]m)"
 
-    subst = "<time>\\0\\1\\2<time>"
+    subst = "<stime>\\0\\1\\2<stime>"
 
-    # You can manually specify the number of replacements by changing the 4th argument
     result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
 
     if result:
         print(result)
+
+        matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
+        start_time = []
+        for matchNum, match in enumerate(matches):
+            matchNum = matchNum + 1
+            start_time.append(match.group())
+            break
+
+        print(start_time)
+        return start_time
 
 
 def header_location():
@@ -37,6 +46,14 @@ def header_location():
 
     if result:
         print(result)
+        matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
+        location = []
+        for matchNum, match in enumerate(matches):
+            matchNum = matchNum + 1
+            location.append(match.group())
+            break
+        print(location)
+        return location
 
 
 def header_speaker():
@@ -46,6 +63,14 @@ def header_speaker():
     result = re.sub(regex, subst, header, 0, re.MULTILINE | re.IGNORECASE)
     if result:
         print(result)
+        matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
+        speaker = []
+        for matchNum, match in enumerate(matches):
+            matchNum = matchNum + 1
+            speaker.append(match.group())
+            break
+        print(speaker)
+        return speaker
 
 
 def stanford_tagger(text):
@@ -102,8 +127,8 @@ def stanford_main():
 
 
 header_time()
-# header_location()
-# header_speaker()
+header_location()
+header_speaker()
 # stanford_main()
 
 # stanford_tagger(header)
