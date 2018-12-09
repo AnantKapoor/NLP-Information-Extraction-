@@ -11,7 +11,7 @@ st = StanfordNERTagger('../english.all.3class.distsim.crf.ser.gz',
                        '../stanford-ner.jar',
                        encoding='utf-8')
 
-x = open("../data/seminars_untagged/310.txt").read()
+x = open("../data/seminars_untagged/301.txt").read()
 header = x[:x.find('Abstract: ')]
 body = x[x.find('Abstract: '):]
 print(header)
@@ -20,7 +20,7 @@ print(header)
 def header_time():
     regex = r"([012]?[0-9][:][0-9]{2}?\s?[ap]m)|([012]?[0-9][:][0-9]{2})|([01][0-9]?\s?[ap]m)"
 
-    subst = "<time>\\1<time>"
+    subst = "<time>\\0\\1\\2<time>"
 
     # You can manually specify the number of replacements by changing the 4th argument
     result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
@@ -102,8 +102,8 @@ def stanford_main():
 
 
 header_time()
-header_location()
-header_speaker()
+# header_location()
+# header_speaker()
 # stanford_main()
 
 # stanford_tagger(header)

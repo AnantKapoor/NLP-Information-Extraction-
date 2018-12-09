@@ -7,13 +7,14 @@ Part 1: Entity Tagging
     4) Changed RegEx for time to only output the first result (BAD METHOD, FIX!)
     5) Fixed regex, using re.sub now
     5) Implemented Stanford tagger to extract names and organisations
-    6) Tagged times and locations (bad implentation - add white space recognition in regex) in header
+    6) Tagged times and locations (bad implementation - add white space recognition in regex) in header
     7) Tagged speaker in header (add white space recognition in regex)
+    8) Fixed time regex re.sub
 
     NEXT
-    tag speaker from header
+    for headers that don't include 'who:' use stanford ner to tag 2nd occurring name
     validate info from header to tag main body
-    use tagged times and locations from
+    use tagged times and locations from header
     see accuracy of time and location tags
         F measure
     regex to extract sentences
@@ -25,6 +26,14 @@ Part 1: Entity Tagging
 
 
 Part 2: Ontology Construction
+    1) Extracted header contents if 'topic:' exists
+    2) Extracted most frequent words in a single email
+    3) Extracted most frequent words in email corpus
+
+
+    NEXT
+    collect words in all topics in the email corpus and then order them by frequency, most frequent likely to be terms for ontology
+
 
 
 
