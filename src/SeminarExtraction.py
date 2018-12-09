@@ -11,12 +11,12 @@ st = StanfordNERTagger('../english.all.3class.distsim.crf.ser.gz',
                        '../stanford-ner.jar',
                        encoding='utf-8')
 
-x = open("../data/seminars_untagged/302.txt").read()
+x = open("../data/seminars_untagged/314.txt").read()
 header = x[:x.find('Abstract: ')]
 body = x[x.find('Abstract: '):]
 
-
-print(header)
+print(x)
+# print(header)
 
 
 def header_time():
@@ -60,23 +60,17 @@ def header_location():
 
 def header_speaker():
     regex = r"(?<=who:      )(.*?)(?=,|-|\n)"
-    subst = "<Speaker>\\1<Speaker>"
-    # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
-    result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
-    if result != []:
-        # print(result)
-        matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
-        speaker = ""
-        for matchNum, match in enumerate(matches):
-            matchNum = matchNum + 1
-            speaker = (match.group())
-            break
-        # print(speaker)
+    matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
+    speaker = ""
+    for matchNum, match in enumerate(matches):
+        matchNum = matchNum + 1
+        speaker = (match.group())
+        break
+    if speaker != "":
         return speaker
-    # else:
-    #     speaker = stanford_name()
-    #     return speaker
-
+    else:
+        speaker = stanford_name()
+        return speaker
 
 
 def email_tagger():
@@ -105,14 +99,6 @@ def email_tagger():
             new_x = result
 
     if speaker != "":
-        speak_regex = re.escape(speaker)
-        speak_subst = "<speaker>" + speaker + "<speaker>"
-        result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
-
-        if result:
-            new_x = result
-    else:
-        speaker = stanford_name()
         speak_regex = re.escape(speaker)
         speak_subst = "<speaker>" + speaker + "<speaker>"
         result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
@@ -174,18 +160,13 @@ def stanford_name():
         ner_list = (structure_ne(stanford_tree(bio_tagger(stanford_tagger(header)))))
         person_int = 0
         name = ""
-        # while person_int < 2:
-        #     if ner_list[i][1] == "PERSON":
-        #         name = ner_list[i][0]
-
         for i in ner_list:
             if person_int < 2:
                 if i[1] == "PERSON":
                     name = i[0]
                     person_int += 1
-
-        print(ner_list)
-        print(name)
+        # print(ner_list)
+        # print(name)
         return name
     except:
         print("Failed Stanford Tagging")

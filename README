@@ -14,7 +14,8 @@ Part 1: Entity Tagging
     10) Used Stanford NER to find 2nd occurring name in header if name is not able to be extracted using "who:" RegEx
 
     NEXT
-    for headers that don't include 'who:' use stanford ner to tag 2nd occurring name
+    split speaker extraction variable to search for first or second names as well
+    time 1:00 pm will be used to find same values in different format (e.g. 1pm)
     see accuracy of time and location tags
         F measure
     regex to extract sentences
