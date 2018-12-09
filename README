@@ -11,6 +11,7 @@ Part 1: Entity Tagging
     7) Tagged speaker in header (add white space recognition in regex)
     8) Fixed time regex re.sub
     9) Tagged email with time, location and speaker
+    10) Used Stanford NER to find 2nd occurring name in header if name is not able to be extracted using "who:" RegEx
 
     NEXT
     for headers that don't include 'who:' use stanford ner to tag 2nd occurring name

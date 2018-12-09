@@ -11,9 +11,11 @@ st = StanfordNERTagger('../english.all.3class.distsim.crf.ser.gz',
                        '../stanford-ner.jar',
                        encoding='utf-8')
 
-x = open("../data/seminars_untagged/301.txt").read()
+x = open("../data/seminars_untagged/302.txt").read()
 header = x[:x.find('Abstract: ')]
 body = x[x.find('Abstract: '):]
+
+
 print(header)
 
 
@@ -47,7 +49,7 @@ def header_location():
     if result:
         # print(result)
         matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
-        location = []
+        location = ""
         for matchNum, match in enumerate(matches):
             matchNum = matchNum + 1
             location = (match.group())
@@ -60,8 +62,8 @@ def header_speaker():
     regex = r"(?<=who:      )(.*?)(?=,|-|\n)"
     subst = "<Speaker>\\1<Speaker>"
     # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
-    result = re.sub(regex, subst, header, 0, re.MULTILINE | re.IGNORECASE)
-    if result:
+    result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
+    if result != []:
         # print(result)
         matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
         speaker = ""
@@ -71,6 +73,10 @@ def header_speaker():
             break
         # print(speaker)
         return speaker
+    # else:
+    #     speaker = stanford_name()
+    #     return speaker
+
 
 
 def email_tagger():
@@ -82,26 +88,37 @@ def email_tagger():
     print("speaker:", speaker)
     new_x = ""
 
-    time_regex = r""+(re.escape(time))+r""
-    time_subst = "<stime>"+time+"<stime>"
-    result = re.sub(time_regex, time_subst, x, 0, re.MULTILINE | re.IGNORECASE)
+    if time != "":
+        time_regex = r"" + (re.escape(time)) + r""
+        time_subst = "<stime>" + time + "<stime>"
+        result = re.sub(time_regex, time_subst, x, 0, re.MULTILINE | re.IGNORECASE)
 
-    if result:
-        new_x = result
+        if result:
+            new_x = result
 
-    loc_regex = re.escape(location)
-    loc_subst = "<location>"+location+"<location>"
-    result = re.sub(loc_regex, loc_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
+    if location != "":
+        loc_regex = re.escape(location)
+        loc_subst = "<location>" + location + "<location>"
+        result = re.sub(loc_regex, loc_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
 
-    if result:
-        new_x = result
+        if result:
+            new_x = result
 
-    speak_regex = re.escape(speaker)
-    speak_subst = "<speaker>"+speaker+"<speaker>"
-    result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
+    if speaker != "":
+        speak_regex = re.escape(speaker)
+        speak_subst = "<speaker>" + speaker + "<speaker>"
+        result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
 
-    if result:
-        new_x = result
+        if result:
+            new_x = result
+    else:
+        speaker = stanford_name()
+        speak_regex = re.escape(speaker)
+        speak_subst = "<speaker>" + speaker + "<speaker>"
+        result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
+
+        if result:
+            new_x = result
 
     print(new_x)
 
@@ -152,17 +169,28 @@ def structure_ne(ne_tree):
     return ne
 
 
-def stanford_main():
+def stanford_name():
     try:
-        print(structure_ne(stanford_tree(bio_tagger(stanford_tagger(header)))))
+        ner_list = (structure_ne(stanford_tree(bio_tagger(stanford_tagger(header)))))
+        person_int = 0
+        name = ""
+        # while person_int < 2:
+        #     if ner_list[i][1] == "PERSON":
+        #         name = ner_list[i][0]
+
+        for i in ner_list:
+            if person_int < 2:
+                if i[1] == "PERSON":
+                    name = i[0]
+                    person_int += 1
+
+        print(ner_list)
+        print(name)
+        return name
     except:
         print("Failed Stanford Tagging")
 
 
 email_tagger()
-# header_time()
-# header_location()
-# header_speaker()
-# stanford_main()
 
-# stanford_tagger(header)
+# stanford_name()
