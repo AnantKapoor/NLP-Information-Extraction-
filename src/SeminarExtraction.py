@@ -25,16 +25,16 @@ def header_time():
     result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
 
     if result:
-        print(result)
+        # print(result)
 
         matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
-        start_time = []
+        start_time = ""
         for matchNum, match in enumerate(matches):
             matchNum = matchNum + 1
-            start_time.append(match.group())
+            start_time = (match.group())
             break
 
-        print(start_time)
+        # print(start_time)
         return start_time
 
 
@@ -45,14 +45,14 @@ def header_location():
     result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
 
     if result:
-        print(result)
+        # print(result)
         matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
         location = []
         for matchNum, match in enumerate(matches):
             matchNum = matchNum + 1
-            location.append(match.group())
+            location = (match.group())
             break
-        print(location)
+        # print(location)
         return location
 
 
@@ -62,15 +62,48 @@ def header_speaker():
     # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
     result = re.sub(regex, subst, header, 0, re.MULTILINE | re.IGNORECASE)
     if result:
-        print(result)
+        # print(result)
         matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
-        speaker = []
+        speaker = ""
         for matchNum, match in enumerate(matches):
             matchNum = matchNum + 1
-            speaker.append(match.group())
+            speaker = (match.group())
             break
-        print(speaker)
+        # print(speaker)
         return speaker
+
+
+def email_tagger():
+    time = header_time()
+    print("start time:", time)
+    location = header_location()
+    print("location:", location)
+    speaker = header_speaker()
+    print("speaker:", speaker)
+    new_x = ""
+
+    time_regex = r""+(re.escape(time))+r""
+    time_subst = "<stime>"+time+"<stime>"
+    result = re.sub(time_regex, time_subst, x, 0, re.MULTILINE | re.IGNORECASE)
+
+    if result:
+        new_x = result
+
+    loc_regex = re.escape(location)
+    loc_subst = "<location>"+location+"<location>"
+    result = re.sub(loc_regex, loc_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
+
+    if result:
+        new_x = result
+
+    speak_regex = re.escape(speaker)
+    speak_subst = "<speaker>"+speaker+"<speaker>"
+    result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
+
+    if result:
+        new_x = result
+
+    print(new_x)
 
 
 def stanford_tagger(text):
@@ -126,9 +159,10 @@ def stanford_main():
         print("Failed Stanford Tagging")
 
 
-header_time()
-header_location()
-header_speaker()
+email_tagger()
+# header_time()
+# header_location()
+# header_speaker()
 # stanford_main()
 
 # stanford_tagger(header)

@@ -10,11 +10,10 @@ Part 1: Entity Tagging
     6) Tagged times and locations (bad implementation - add white space recognition in regex) in header
     7) Tagged speaker in header (add white space recognition in regex)
     8) Fixed time regex re.sub
+    9) Tagged email with time, location and speaker
 
     NEXT
     for headers that don't include 'who:' use stanford ner to tag 2nd occurring name
-    validate info from header to tag main body
-    use tagged times and locations from header
     see accuracy of time and location tags
         F measure
     regex to extract sentences
