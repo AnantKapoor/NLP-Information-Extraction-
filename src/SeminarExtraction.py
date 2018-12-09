@@ -11,11 +11,11 @@ st = StanfordNERTagger('../english.all.3class.distsim.crf.ser.gz',
                        '../stanford-ner.jar',
                        encoding='utf-8')
 
-x = open("../data/seminars_untagged/314.txt").read()
+x = open("../data/seminars_untagged/400.txt").read()
 header = x[:x.find('Abstract: ')]
 body = x[x.find('Abstract: '):]
 
-print(x)
+print(x, "\n \n \n \n")
 # print(header)
 
 
@@ -59,7 +59,7 @@ def header_location():
 
 
 def header_speaker():
-    regex = r"(?<=who:      )(.*?)(?=,|-|\n)"
+    regex = r"(?<=who:      )(.*?)(?=,|-| / |\n)"
     matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
     speaker = ""
     for matchNum, match in enumerate(matches):
