@@ -56,7 +56,7 @@ def header_topic():
                                                                             group=match.group(groupNum)))
 
 
-# word_freq_corpus()
+word_freq_corpus()
 
 word_freq_email()
 

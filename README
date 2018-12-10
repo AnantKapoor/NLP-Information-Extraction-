@@ -12,12 +12,17 @@ Part 1: Entity Tagging
     8) Fixed time regex re.sub
     9) Tagged email with time, location and speaker
     10) Used Stanford NER to find 2nd occurring name in header if name is not able to be extracted using "who:" RegEx
-
+    11) Written tagged emails to test_untagged
     NEXT
     split speaker extraction variable to search for first or second names as well
+    speaker extraction: 'speaker will be...', 'speaker is ...'
     time 1:00 pm will be used to find same values in different format (e.g. 1pm)
     see accuracy of time and location tags
         F measure
+
+        You basically clear all but one tag from both yours and the provided tagged text, and try to match up the tagged parts
+        If they match it's a true positive, if yours has it and the provided one doesn't it's a false positive
+        and if the provided one has it and yours doesn't it's a false negative
     regex to extract sentences
     Regex for job titles Dr.|Mr.|Ms|Mrs|Prof. (NN1 NN2) probably indicates that NN1 and NN2 are a person name.
      Similarly the POS tag pattern NN1 NN1 Verb probably indicates a name.
@@ -36,16 +41,11 @@ Part 2: Ontology Construction
     collect words in all topics in the email corpus and then order them by frequency, most frequent likely to be terms for ontology
 
 
-
-
-
-
-
-
-
-
-
 stanford tagger
         use for name entities (speakers)
         don't parse each sentence individually
         parse entire email in one go
+
+
+
+

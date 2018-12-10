@@ -11,15 +11,21 @@ st = StanfordNERTagger('../english.all.3class.distsim.crf.ser.gz',
                        '../stanford-ner.jar',
                        encoding='utf-8')
 
-x = open("../data/seminars_untagged/400.txt").read()
-header = x[:x.find('Abstract: ')]
-body = x[x.find('Abstract: '):]
 
-print(x, "\n \n \n \n")
-# print(header)
+def main():
+    for i in range(184):
+        print(i)
+        x = open("../data/seminars_untagged/" + str(301 + i) + ".txt").read()
+        header = x[:x.find('Abstract: ')]
+        body = x[x.find('Abstract: '):]
+
+        email_tagger(x, header, i)
+
+        # print(x, "\n \n \n \n")
+        # print(header)
 
 
-def header_time():
+def header_time(header):
     regex = r"([012]?[0-9][:][0-9]{2}?\s?[ap]m)|([012]?[0-9][:][0-9]{2})|([01][0-9]?\s?[ap]m)"
 
     subst = "<stime>\\0\\1\\2<stime>"
@@ -40,7 +46,7 @@ def header_time():
         return start_time
 
 
-def header_location():
+def header_location(header):
     regex = r"(?<=place:    )(.*$)"
     subst = "<location>\\1<location>"
     # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
@@ -58,7 +64,7 @@ def header_location():
         return location
 
 
-def header_speaker():
+def header_speaker(header):
     regex = r"(?<=who:      )(.*?)(?=,|-| / |\n)"
     matches = re.finditer(regex, header, re.IGNORECASE | re.MULTILINE)
     speaker = ""
@@ -69,17 +75,32 @@ def header_speaker():
     if speaker != "":
         return speaker
     else:
-        speaker = stanford_name()
-        return speaker
+        try:
+            speaker = stanford_name()
+            return speaker
+        except:
+            # print("failed st tagging")
+            return []
 
 
-def email_tagger():
-    time = header_time()
-    print("start time:", time)
-    location = header_location()
-    print("location:", location)
-    speaker = header_speaker()
-    print("speaker:", speaker)
+def sentence_tagger(new_x):
+    regex = r"\s+[A-Za-z,;'\"\s]+[.?!]$"
+
+    subst = "<sentence>\\0</sentence>"
+    result = re.sub(regex, subst, new_x, 0, re.IGNORECASE | re.MULTILINE)
+
+    if result:
+        return result
+        # print(result)
+
+
+def email_tagger(x, header, i):
+    time = header_time(header)
+    # print("start time:", time)
+    location = header_location(header)
+    # print("location:", location)
+    speaker = header_speaker(header)
+    # print("speaker:", speaker)
     new_x = ""
 
     if time != "":
@@ -99,14 +120,24 @@ def email_tagger():
             new_x = result
 
     if speaker != "":
-        speak_regex = re.escape(speaker)
-        speak_subst = "<speaker>" + speaker + "<speaker>"
-        result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
+        try:
+            speak_regex = re.escape(speaker)
+            speak_subst = "<speaker>" + speaker + "<speaker>"
+            result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
 
-        if result:
-            new_x = result
+            if result:
+                new_x = result
 
-    print(new_x)
+        except:
+            print("failed to tag speaker")
+
+    tagged = sentence_tagger(new_x)
+    print(tagged)
+    with open('../data/test_untagged/' + str(301 + i) + '.txt', 'r+') as f:
+        # convert to string:
+        f.seek(0)
+        f.write(tagged)
+        f.truncate()
 
 
 def stanford_tagger(text):
@@ -172,6 +203,29 @@ def stanford_name():
         print("Failed Stanford Tagging")
 
 
-email_tagger()
+def precision():
+    true_p = 0
+    false_p = 0
+    total_p_p = true_p + false_p
+    pre = true_p / total_p_p
+    return pre
 
+
+def recall():
+    true_p = 0
+    false_n = 0
+    total_a_p = true_p + false_n
+    rec = true_p / total_a_p
+    return rec
+
+
+def f1():
+    pre = precision()
+    rec = recall()
+    f1_score = 2 * ((pre * rec) / (pre + rec))
+    return f1_score
+
+
+# email_tagger()
 # stanford_name()
+main()
