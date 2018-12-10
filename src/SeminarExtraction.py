@@ -20,9 +20,7 @@ def main():
         body = x[x.find('Abstract: '):]
 
         email_tagger(x, header, i)
-
-        # print(x, "\n \n \n \n")
-        # print(header)
+    check_tags_main()
 
 
 def header_time(header):
@@ -203,28 +201,148 @@ def stanford_name():
         print("Failed Stanford Tagging")
 
 
-def precision():
-    true_p = 0
-    false_p = 0
+def check_tags_main():
+    true_positive = 0
+    false_positive = 0
+    false_negative = 0
+
+    for i in range(184):
+        test = open("../data/test_tagged/" + str(301 + i) + ".txt").read()
+        my_tagged = open("../data/test_untagged/" + str(301 + i) + ".txt").read()
+
+        mytagged_time = check_all_tags('time', my_tagged)
+        test_time = check_all_tags('time', test)
+        mytagged_location = check_all_tags('location', my_tagged)
+        test_location = check_all_tags('location', test)
+        mytagged_speaker = check_all_tags('speaker', my_tagged)
+        test_speaker = check_all_tags('speaker', test)
+        mytagged_sentence = check_all_tags('sentence', my_tagged)
+        test_sentence = check_all_tags('sentence', test)
+        mytagged_paragraph = check_all_tags('paragraph', my_tagged)
+        test_paragraph = check_all_tags('paragraph', test)
+
+        # print('mytagged_time', mytagged_time)
+        # print('test_time', test_time)
+        # print('test_location', test_location)
+        # print('mytagged_location', mytagged_location)
+        # print('mytagged_speaker', mytagged_speaker)
+        # print('test_speaker', test_speaker)
+        # print('test_sentence', test_sentence)
+        # print('mytagged_sentence', mytagged_sentence)
+        # print('test_paragraph', test_paragraph)
+
+        try:
+            for i in range(len(mytagged_time)):
+                if mytagged_time[i] == test_time[i]:
+                    true_positive += 1
+                elif mytagged_time[i] != test_time[i]:
+                    false_positive += 1
+        except:
+            print("")
+        try:
+            for i in range(len(test_time)):
+                if test_time[i] != mytagged_time[i]:
+                    false_negative += 1
+        except:
+            print("")
+
+        try:
+            for i in range(len(mytagged_location)):
+                if mytagged_time[i] == test_time[i]:
+                    true_positive += 1
+                elif mytagged_location[i] != test_location[i]:
+                    false_positive += 1
+        except:
+            print("")
+        try:
+            for i in range(len(test_location)):
+                if test_location[i] != mytagged_location[i]:
+                    false_negative += 1
+        except:
+            print("")
+        try:
+            for i in range(len(mytagged_speaker)):
+                if mytagged_speaker[i] == test_speaker[i]:
+                    true_positive += 1
+                elif mytagged_speaker[i] != test_speaker[i]:
+                    false_positive += 1
+        except:
+            print("")
+        try:
+            for i in range(len(test_speaker)):
+                if test_speaker[i] != mytagged_speaker[i]:
+                    false_negative += 1
+        except:
+            print("")
+        try:
+            for i in range(len(mytagged_sentence)):
+                if mytagged_sentence[i] == test_sentence[i]:
+                    true_positive += 1
+                elif mytagged_sentence[i] != test_sentence[i]:
+                    false_positive += 1
+        except:
+            print("")
+        try:
+            for i in range(len(test_sentence)):
+                if test_sentence[i] != mytagged_sentence[i]:
+                    false_negative += 1
+        except:
+            print("")
+        try:
+            for i in range(len(test_paragraph)):
+                if test_paragraph[i] != mytagged_paragraph[i]:
+                    false_negative += 1
+        except:
+            print("")
+        try:
+            for i in range(len(mytagged_paragraph)):
+                if mytagged_paragraph[i] == test_paragraph[i]:
+                    true_positive += 1
+                elif mytagged_paragraph[i] != test_paragraph[i]:
+                    false_positive += 1
+        except:
+            print("")
+
+    f1_score = f1(precision(true_positive, false_positive), recall(true_positive,false_negative))
+    print("f1 score: ", f1_score)
+
+    # print("checked tags")
+
+
+def check_all_tags(tag, text):
+    reg = re.compile(rf'(?<=<{tag}>)(.+?)(?=</{tag}>)', re.IGNORECASE | re.MULTILINE)
+
+    return reg.findall(text)
+
+
+def precision(true_p, false_p):
+
     total_p_p = true_p + false_p
-    pre = true_p / total_p_p
-    return pre
+    try:
+        pre = true_p / total_p_p
+        print("precision:", pre)
+        return pre
+    except:
+        print("precision failed")
 
 
-def recall():
-    true_p = 0
-    false_n = 0
+def recall(true_p, false_n):
+
     total_a_p = true_p + false_n
-    rec = true_p / total_a_p
-    return rec
+    try:
+        rec = true_p / total_a_p
+        print("recall: ", rec)
+        return rec
+    except:
+        print("recall failed")
 
 
-def f1():
-    pre = precision()
-    rec = recall()
-    f1_score = 2 * ((pre * rec) / (pre + rec))
-    return f1_score
-
+def f1(pre, rec):
+    try:
+        f1_score = 2 * ((pre * rec) / (pre + rec))
+        return f1_score
+    except:
+        print("f1 calculation failed")
 
 # email_tagger()
 # stanford_name()

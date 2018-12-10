@@ -13,6 +13,16 @@ Part 1: Entity Tagging
     9) Tagged email with time, location and speaker
     10) Used Stanford NER to find 2nd occurring name in header if name is not able to be extracted using "who:" RegEx
     11) Written tagged emails to test_untagged
+    12) RegEx to extract sentences(re-implement this +paragraphs)
+
+
+    check tags
+
+
+
+
+
+
     NEXT
     split speaker extraction variable to search for first or second names as well
     speaker extraction: 'speaker will be...', 'speaker is ...'
@@ -26,9 +36,6 @@ Part 1: Entity Tagging
     regex to extract sentences
     Regex for job titles Dr.|Mr.|Ms|Mrs|Prof. (NN1 NN2) probably indicates that NN1 and NN2 are a person name.
      Similarly the POS tag pattern NN1 NN1 Verb probably indicates a name.
-
-
-    more tips' page on canvas
 
 
 Part 2: Ontology Construction
