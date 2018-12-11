@@ -26,7 +26,7 @@ def main():
 def header_time(header):
     regex = r"([012]?[0-9][:][0-9]{2}?\s?[ap]m)|([012]?[0-9][:][0-9]{2})|([01][0-9]?\s?[ap]m)"
 
-    subst = "<stime>\\0\\1\\2<stime>"
+    subst = "<stime>\\0\\1\\2</stime>"
 
     result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
 
@@ -46,7 +46,7 @@ def header_time(header):
 
 def header_location(header):
     regex = r"(?<=place:    )(.*$)"
-    subst = "<location>\\1<location>"
+    subst = "<location>\\1</location>"
     # locationMatches = re.search(locationRegEx, header, re.MULTILINE | re.IGNORECASE)
     result = re.sub(regex, subst, header, 1, re.MULTILINE | re.IGNORECASE)
 
@@ -103,7 +103,7 @@ def email_tagger(x, header, i):
 
     if time != "":
         time_regex = r"" + (re.escape(time)) + r""
-        time_subst = "<stime>" + time + "<stime>"
+        time_subst = "<stime>" + time + "</stime>"
         result = re.sub(time_regex, time_subst, x, 0, re.MULTILINE | re.IGNORECASE)
 
         if result:
@@ -111,7 +111,7 @@ def email_tagger(x, header, i):
 
     if location != "":
         loc_regex = re.escape(location)
-        loc_subst = "<location>" + location + "<location>"
+        loc_subst = "<location>" + location + "</location>"
         result = re.sub(loc_regex, loc_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
 
         if result:
@@ -120,7 +120,7 @@ def email_tagger(x, header, i):
     if speaker != "":
         try:
             speak_regex = re.escape(speaker)
-            speak_subst = "<speaker>" + speaker + "<speaker>"
+            speak_subst = "<speaker>" + speaker + "</speaker>"
             result = re.sub(speak_regex, speak_subst, new_x, 0, re.MULTILINE | re.IGNORECASE)
 
             if result:
@@ -210,8 +210,8 @@ def check_tags_main():
         test = open("../data/test_tagged/" + str(301 + i) + ".txt").read()
         my_tagged = open("../data/test_untagged/" + str(301 + i) + ".txt").read()
 
-        mytagged_time = check_all_tags('time', my_tagged)
-        test_time = check_all_tags('time', test)
+        mytagged_time = check_all_tags('stime', my_tagged)
+        test_time = check_all_tags('stime', test)
         mytagged_location = check_all_tags('location', my_tagged)
         test_location = check_all_tags('location', test)
         mytagged_speaker = check_all_tags('speaker', my_tagged)
@@ -221,17 +221,18 @@ def check_tags_main():
         mytagged_paragraph = check_all_tags('paragraph', my_tagged)
         test_paragraph = check_all_tags('paragraph', test)
 
-        # print('mytagged_time', mytagged_time)
-        # print('test_time', test_time)
-        # print('test_location', test_location)
-        # print('mytagged_location', mytagged_location)
-        # print('mytagged_speaker', mytagged_speaker)
-        # print('test_speaker', test_speaker)
-        # print('test_sentence', test_sentence)
-        # print('mytagged_sentence', mytagged_sentence)
-        # print('test_paragraph', test_paragraph)
+        print('mytagged_time', mytagged_time)
+        print('test_time', test_time)
+        print('test_location', test_location)
+        print('mytagged_location', mytagged_location)
+        print('mytagged_speaker', mytagged_speaker)
+        print('test_speaker', test_speaker)
+        print('test_sentence', test_sentence)
+        print('mytagged_sentence', mytagged_sentence)
+        print('test_paragraph', test_paragraph)
 
         try:
+            i=0
             for i in range(len(mytagged_time)):
                 if mytagged_time[i] == test_time[i]:
                     true_positive += 1
@@ -240,6 +241,7 @@ def check_tags_main():
         except:
             print("")
         try:
+            i=0
             for i in range(len(test_time)):
                 if test_time[i] != mytagged_time[i]:
                     false_negative += 1
@@ -247,6 +249,7 @@ def check_tags_main():
             print("")
 
         try:
+            i = 0
             for i in range(len(mytagged_location)):
                 if mytagged_time[i] == test_time[i]:
                     true_positive += 1
@@ -255,12 +258,14 @@ def check_tags_main():
         except:
             print("")
         try:
+            i = 0
             for i in range(len(test_location)):
                 if test_location[i] != mytagged_location[i]:
                     false_negative += 1
         except:
             print("")
         try:
+            i = 0
             for i in range(len(mytagged_speaker)):
                 if mytagged_speaker[i] == test_speaker[i]:
                     true_positive += 1
@@ -269,12 +274,14 @@ def check_tags_main():
         except:
             print("")
         try:
+            i = 0
             for i in range(len(test_speaker)):
                 if test_speaker[i] != mytagged_speaker[i]:
                     false_negative += 1
         except:
             print("")
         try:
+            i = 0
             for i in range(len(mytagged_sentence)):
                 if mytagged_sentence[i] == test_sentence[i]:
                     true_positive += 1
@@ -283,18 +290,21 @@ def check_tags_main():
         except:
             print("")
         try:
+            i = 0
             for i in range(len(test_sentence)):
                 if test_sentence[i] != mytagged_sentence[i]:
                     false_negative += 1
         except:
             print("")
         try:
+            i = 0
             for i in range(len(test_paragraph)):
                 if test_paragraph[i] != mytagged_paragraph[i]:
                     false_negative += 1
         except:
             print("")
         try:
+            i = 0
             for i in range(len(mytagged_paragraph)):
                 if mytagged_paragraph[i] == test_paragraph[i]:
                     true_positive += 1
@@ -310,7 +320,7 @@ def check_tags_main():
 
 
 def check_all_tags(tag, text):
-    reg = re.compile(rf'(?<=<{tag}>)(.+?)(?=</{tag}>)', re.IGNORECASE | re.MULTILINE)
+    reg = re.compile(rf'(?<=<{tag}>)([\w\W]+?)(?=</{tag}>)', re.IGNORECASE | re.MULTILINE)
 
     return reg.findall(text)
 
