@@ -61,6 +61,7 @@ With all entities:
 - Precision:0.464
 - Recall: 0.456
 - F1 score: 0.460 
+
 Without sentences and paragraphs:
 - F1-score: 0.835
 
