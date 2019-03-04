@@ -57,11 +57,11 @@ negatives. The total of each of these values from all of the emails are then
 used in turn to calculate precision, recall and the F1 score.
 
 # 3 RESULTS
-- With all entities:
+With all entities:
 - Precision:0.464
 - Recall: 0.456
 - F1 score: 0.460
-- Without sentences and paragraphs:
+Without sentences and paragraphs:
 - F1-score: 0.835
 
 # 4 CONCLUSION
